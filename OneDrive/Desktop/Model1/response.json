@@ -1,0 +1,6 @@
+{
+    "request_id": "req_123",
+    "processed_text": "HELLO WORLD",
+    "confidence": 0.98,
+    "review_needed": false
+}
