@@ -1,32 +1,32 @@
 import speech_recognition as sr
 
+
 def voice_input():
-    r = sr.Recognizer()
+    recognizer = sr.Recognizer()
 
     with sr.Microphone() as source:
         print("Speak your task...")
-        r.adjust_for_ambient_noise(source, duration=1)
-        audio = r.listen(source)
+        recognizer.adjust_for_ambient_noise(source, duration=1)
+        audio = recognizer.listen(source)
 
     try:
-        text = r.recognize_google(audio)
+        text = recognizer.recognize_google(audio)
         print("You said:", text)
         return text
     except sr.UnknownValueError:
         print("Sorry, could not understand.")
     except sr.RequestError:
         print("Internet error.")
-    
+
     return None
+
+
 def load_tasks():
-    tasks = []
     try:
         with open("tasks.txt", "r") as file:
-            for line in file:
-                tasks.append(line.strip())
+            return [line.strip() for line in file]
     except FileNotFoundError:
-        pass
-    return tasks
+        return []
 
 
 def save_tasks(tasks):
@@ -35,49 +35,45 @@ def save_tasks(tasks):
             file.write(task + "\n")
 
 
-def add_tasks(tasks):
-    while True:
-        try:
-            n = int(input("How many tasks do you want to add? "))
-            break
-        except ValueError:
-            print("Please enter a valid number.")
+def add_task_keyboard(tasks):
+    task = input("Enter your task: ")
+    tasks.append(task)
+    print("Task added successfully!")
 
-    for i in range(n):
-        task = input(f"Enter task {i+1}: ")
+
+def add_task_voice(tasks):
+    task = voice_input()
+    if task:
         tasks.append(task)
-
-    print("Tasks added successfully!")
+        print("Voice task added successfully!")
 
 
 def show_tasks(tasks):
-    print("\n===== YOUR TASKS =====")
-    if not tasks:
+    print("\n----- YOUR TASKS -----")
+    if len(tasks) == 0:
         print("No tasks available.")
     else:
-        for i in range(len(tasks)):
-            print(f"{i+1}. {tasks[i]}")
-    print("======================\n")
+        for i, task in enumerate(tasks, start=1):
+            print(f"{i}. {task}")
+    print("----------------------\n")
 
 
 def delete_task(tasks):
-    if not tasks:
+    if len(tasks) == 0:
         print("No tasks to delete.")
         return
 
     show_tasks(tasks)
 
-    while True:
-        try:
-            task_number = int(input("Enter task number to delete: "))
-            if 1 <= task_number <= len(tasks):
-                removed = tasks.pop(task_number - 1)
-                print(f"'{removed}' deleted successfully!")
-                break
-            else:
-                print("Invalid task number.")
-        except ValueError:
-            print("Please enter a valid number.")
+    try:
+        number = int(input("Enter task number to delete: "))
+        if 1 <= number <= len(tasks):
+            removed_task = tasks.pop(number - 1)
+            print(f"'{removed_task}' deleted successfully!")
+        else:
+            print("Invalid task number.")
+    except ValueError:
+        print("Please enter a valid number.")
 
 
 def main():
@@ -89,35 +85,34 @@ def main():
         print("2. Add Task (Voice)")
         print("3. Show Tasks")
         print("4. Delete Task")
-        print("5. Exit") 
+        print("5. Exit")
         print("==========================")
 
         choice = input("Choose an option (1-5): ")
 
         if choice == "1":
-            add_tasks(tasks)
+            add_task_keyboard(tasks)
             save_tasks(tasks)
 
         elif choice == "2":
-         task = voice_input()
-         if task:
-          tasks.append(task)
-          save_tasks(tasks)
-          print("Voice task added successfully!" )
+            add_task_voice(tasks)
+            save_tasks(tasks)
 
         elif choice == "3":
+            show_tasks(tasks)
+
+        elif choice == "4":
             delete_task(tasks)
             save_tasks(tasks)
 
-        elif choice == "4":
+        elif choice == "5":
             save_tasks(tasks)
             print("Goodbye! Tasks saved.")
             break
 
         else:
-            print("Invalid choice. Please select 1-4.")
+            print("Invalid choice. Please select 1-5.")
 
 
-# Run Program
 if __name__ == "__main__":
     main()

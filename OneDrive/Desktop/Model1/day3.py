@@ -23,9 +23,7 @@ for num in number :
     if num > Largest:
        Second_largest=Largest
        Largest=num
-       print("Largest",Largest)
     elif num > Second_largest and num !=Largest :
         Second_largest=num
-        print("Second largest",Second_largest)
-    else:
-        print("invalid number")
+print("Largest",Largest)
+print("Second largest",Second_largest)

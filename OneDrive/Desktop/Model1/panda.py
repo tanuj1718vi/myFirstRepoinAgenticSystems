@@ -1,19 +1,20 @@
-
+def getting():
  number=[]
  try:
    n=int(input("How many numbers you want to enter:"))
  except ValueError:
-   print("invalic input")
+   print("invalid input")
    n=0
  for i in range (n):
     try:
         num=(int(input(f"enter your number {i+1}:")))
         number.append(num)
 
-    except:
+    except ValueError:
       print("invalid input")
+ return number
+def calculate(number):
  if len(number)>0:
-  print(number)
   print("sum",sum(number))
   print("min",min(number))
   print("max",max(number))
@@ -21,4 +22,6 @@
   print("sorted",sorted(number))
 
  else:
-  print("invalid values")
+  print("invalid input values")
+num=getting()
+calculate(num)
