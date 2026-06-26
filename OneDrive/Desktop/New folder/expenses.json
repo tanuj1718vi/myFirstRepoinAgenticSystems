@@ -1,0 +1,12 @@
+[
+    {
+        "category": "food",
+        "amount": 1400.0,
+        "note": "tier"
+    },
+    {
+        "category": "travel",
+        "amount": 4000.0,
+        "note": "bus"
+    }
+]
